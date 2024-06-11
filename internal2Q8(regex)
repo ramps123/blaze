@@ -1,0 +1,93 @@
+# Importing the regular expression module
+import re
+
+# Function to list four methods of the re module
+def list_re_methods():
+    """Lists four methods provided with the Python Regex module."""
+    methods = ["re.search(pattern, string)",
+               "re.match(pattern, string)",
+               "re.findall(pattern, string)",
+               "re.sub(pattern, repl, string)"]
+    print("Four methods provided with the Python Regex module:")
+    for method in methods:
+        print(method)
+
+# Function to compute the occurrences of specified words in the text
+def count_words_occurrences(text, words):
+    """Counts the occurrences of specified words in the given text."""
+    occurrences = {}
+    for word in words:
+        count = len(re.findall(r'\b' + word + r'\b', text, re.IGNORECASE))
+        occurrences[word] = count
+    return occurrences
+
+# Function to extract specific numbers from the text
+def extract_numbers(text, pattern):
+    """Extracts specific numbers from the text using the provided pattern."""
+    numbers = re.findall(pattern, text)
+    return numbers
+
+# Main function
+def main():
+    # Given text
+    text = """
+    B.E (Civil) I Sem (Main) Examination held in January 2024
+    The Candidates with the following roll numbers have failed in the subjects mentioned against 
+    their roll numbers.
+    Roll.No. Calculus Che BEE PSP Che Lab CE PSP Lab RD Lab BEE LabS.No
+    22EEC0222MEC3722CSC0222MBC0222CYC0222CSC0122EEC0122CYC0122MTC02
+    160123732005 F F F Pass Pass Pass Pass Pass Pass1
+    160323732011 F Pass Pass Pass Pass Pass Pass Pass Pass2
+    160223732016 F F F Pass Pass Pass Pass Pass Pass3
+    160123732019 F Pass F Pass Pass Pass Pass Pass Pass4
+    1602 23732020 Pass F Pass Pass Pass Pass Pass Pass Pass5
+    160123732021 Pass F F Pass Pass Pass Pass Pass Pass6
+    160423732023 Pass F Pass Pass Pass Pass Pass Pass Pass7
+    160123732024 Pass Pass F F Pass Pass Pass Pass Pass8
+    160123733027 F F F F Pass Pass Pass Pass Pass9
+    160123733028 Pass F F Pass Pass Pass Pass Pass Pass10
+    160123732029 F Pass F Pass Pass Pass Pass Pass Pass11
+    160123735031 Pass Pass Pass F Pass Pass Pass Pass Pass12
+    160123733033 F F F F Pass Pass Pass Pass Pass13
+    160123733034 F F(Ab) F(Ab) F(Ab) Pass Pass Pass Pass Pass14
+    160123732036 F Pass F Pass Pass Pass Pass Pass Pass15
+    160323732038 F Pass Pass Pass Pass Pass Pass Pass Pass16
+    160123733039 F F F F F F Pass Pass Pass Pass Pass17
+    160123734041 F F Pass Pass Pass Pass Pass Pass Pass18
+    160123737043 F F F F Pass Pass Pass Pass Pass19
+    160123732046 F F F Pass Pass Pass Pass Pass Pass20
+    160423738049 F F F F Pass Pass Pass Pass Pass21
+    160123732050 F F F F Pass Pass Pass Pass Pass22
+    160123732051 Pass F(Ab) F Pass Pass Pass Pass Pass Pass23
+    160123733053 F F F F Pass Pass Pass Pass Pass24
+    160123732054 F F Pass F Pass Pass Pass Pass Pass25"""
+
+    # List of words to count occurrences
+    words_to_count = ['CBIT', 'cbit', 'subject', 'cbit', '733', 'PSP', 'Pass', 'Fail']
+
+    # Pattern to extract numbers (CBIT and CSE identifiers)
+    pattern = r'\b1601\d{9}\b|\b160123733\d{3}\b'
+
+    try:
+        # a. List four methods of the re module
+        list_re_methods()
+
+        # b. Compute occurrences of specified words
+        occurrences = count_words_occurrences(text, words_to_count)
+        print("\nOccurrences of specified words:")
+        for word, count in occurrences.items():
+            print(f"{word}: {count}")
+
+        # c. Extract specific numbers from the text
+        numbers = extract_numbers(text, pattern)
+        print("\nNumbers extracted from the text:")
+        for number in numbers:
+            print(number)
+    
+    except Exception as e:
+        print("Error:", e)
+
+# Calling the main function
+if __name__ == "__main__":
+    main()
+
