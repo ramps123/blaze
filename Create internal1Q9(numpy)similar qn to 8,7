@@ -1,0 +1,48 @@
+import numpy as np
+
+# a. Ask the user to enter the number of rows and columns (m, n)
+m = int(input("Enter the number of rows (m): "))
+n = int(input("Enter the number of columns (n): "))
+
+# b. Create two matrices (A, B) with random integer numbers with ‘m’ rows and ‘n’ columns
+A = np.random.randint(0, 100, size=(m, n))
+B = np.random.randint(0, 100, size=(m, n))
+
+print("\nMatrix A:")
+print(A)
+print("\nMatrix B:")
+print(B)
+
+# c. Print the mean of matrices A and B
+mean_A = np.mean(A)
+mean_B = np.mean(B)
+
+print(f"\nMean of Matrix A: {mean_A}")
+print(f"Mean of Matrix B: {mean_B}")
+
+# d. Normalize the values of matrix A, where the result contains single digit values
+# Normalization formula: (value - min) / (max - min) * scale
+normalized_A = (A - np.min(A)) / (np.max(A) - np.min(A)) * 9
+
+print("\nNormalized Matrix A (single digit values):")
+print(normalized_A.astype(int))  # converting to int to ensure single digit values
+
+# e. Extract the values of matrix ‘A’ from rows ‘a’ to ‘b’ and columns ‘x’ to ‘y’
+a = int(input("\nEnter the start row index (a): "))
+b = int(input("Enter the end row index (b): "))
+x = int(input("Enter the start column index (x): "))
+y = int(input("Enter the end column index (y): "))
+
+extracted_values = A[a:b+1, x:y+1]
+
+print("\nExtracted values from Matrix A:")
+print(extracted_values)
+
+# f. Extract all the elements of matrix A from column ‘a’ to ‘b’
+a_col = int(input("\nEnter the start column index for extraction (a): "))
+b_col = int(input("Enter the end column index for extraction (b): "))
+
+extracted_columns = A[:, a_col:b_col+1]
+
+print("\nExtracted columns from Matrix A:")
+print(extracted_columns)
