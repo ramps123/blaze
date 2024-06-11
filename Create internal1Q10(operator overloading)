@@ -1,0 +1,59 @@
+class Complex:
+    def _init_(self, x, y):
+        """
+        Initializes the complex object with real part x and imaginary part y.
+        """
+        self.x = x
+        self.y = y
+    
+    def get_x(self):
+        """
+        Returns the real part of the complex number.
+        """
+        return self.x
+    
+    def get_y(self):
+        """
+        Returns the imaginary part of the complex number.
+        """
+        return self.y
+    
+    def _add_(self, other):
+        """
+        Overloads the addition operator to add two complex numbers.
+        """
+        if isinstance(other, Complex):
+            return Complex(self.x + other.x, self.y + other.y)
+        return NotImplemented
+    
+    def _sub_(self, other):
+        """
+        Overloads the subtraction operator to find the difference between two complex numbers.
+        """
+        if isinstance(other, Complex):
+            return Complex(self.x - other.x, self.y - other.y)
+        return NotImplemented
+    
+    def _str_(self):
+        """
+        Returns the string representation of the complex number.
+        """
+        return f"{self.x} + {self.y}i"
+
+# Example usage:
+c1 = Complex(2, 3)
+c2 = Complex(1, 4)
+
+print("Complex number 1:", c1)
+print("Real part of c1:", c1.get_x())
+print("Imaginary part of c1:", c1.get_y())
+
+print("Complex number 2:", c2)
+print("Real part of c2:", c2.get_x())
+print("Imaginary part of c2:", c2.get_y())
+
+c3 = c1 + c2
+print("Sum of c1 and c2:", c3)
+
+c4 = c1 - c2
+print("Difference of c1 and c2:", c4)
