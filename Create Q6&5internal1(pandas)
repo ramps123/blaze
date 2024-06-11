@@ -1,0 +1,49 @@
+import pandas as pd
+
+# Create the data dictionary
+data = {
+    "order_id": [1, 2, 3, 4, 5],
+    "customer_id": [101, 102, 101, 103, 102],
+    "order_date": ["2023-07-01", "2023-07-01", "2023-07-02", "2023-07-02", "2023-07-03"],
+    "product_id": ["A", "B", "A", "C", "A"],
+    "quantity": [2, 3, 1, 2, 1],
+    "price": [10, 15, 10, 20, 10]
+}
+
+# Create a DataFrame
+df = pd.DataFrame(data)
+
+# Save to CSV
+df.to_csv('ecommerce_data.csv', index=False)
+
+# Load the dataset
+df = pd.read_csv('ecommerce_data.csv')
+print("Dataset:")
+print(df)
+
+# Calculate the total revenue for each order
+df['total_revenue'] = df['quantity'] * df['price']
+print("\nTotal Revenue for Each Order:")
+print(df[['order_id', 'total_revenue']])
+
+# Find the top-selling products by total quantity sold
+top_selling_products = df.groupby('product_id')['quantity'].sum().sort_values(ascending=False)
+print("\nTop-Selling Products by Total Quantity Sold:")
+print(top_selling_products)
+
+# Calculate the average quantity and price per order
+average_quantity = df['quantity'].mean()
+average_price = df['price'].mean()
+print(f"\nAverage Quantity per Order: {average_quantity}")
+print(f"Average Price per Order: {average_price}")
+
+# Determine the total revenue for each customer
+customer_revenue = df.groupby('customer_id')['total_revenue'].sum()
+print("\nTotal Revenue for Each Customer:")
+print(customer_revenue)
+
+# Identify the date with the highest total revenue
+date_revenue = df.groupby('order_date')['total_revenue'].sum()
+highest_revenue_date = date_revenue.idxmax()
+highest_revenue_value = date_revenue.max()
+print(f"\nDate with the Highest Total Revenue: {highest_revenue_date} (Total Revenue: {highest_revenue_value})")
