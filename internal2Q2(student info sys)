@@ -1,0 +1,95 @@
+import sqlite3
+
+def create_connection():
+    return sqlite3.connect('student.db')
+
+def create_table(conn):
+    with conn:
+        conn.execute('''CREATE TABLE IF NOT EXISTS students (
+                        rno INTEGER PRIMARY KEY,
+                        name TEXT,
+                        address TEXT,
+                        dob DATE
+                        );''')
+        conn.execute('''CREATE TABLE IF NOT EXISTS courses (
+                        course_code TEXT PRIMARY KEY,
+                        course_name TEXT,
+                        dept TEXT,
+                        credits INTEGER
+                        );''')
+        conn.execute('''CREATE TABLE IF NOT EXISTS enrollment (
+                        rno INTEGER,
+                        course_code TEXT,
+                        FOREIGN KEY (rno) REFERENCES students(rno),
+                        FOREIGN KEY (course_code) REFERENCES courses(course_code)
+                        );''')
+
+def insert_student(conn, student):
+    with conn:
+        try:
+            conn.execute('INSERT INTO students (rno, name, address, dob) VALUES (?, ?, ?, ?)', student)
+        except sqlite3.IntegrityError:
+            print("Roll number already exists.")
+
+def insert_course(conn, course):
+    with conn:
+        conn.execute('INSERT INTO courses (course_code, course_name, dept, credits) VALUES (?, ?, ?, ?)', course)
+
+def insert_enrollment(conn, enrollment):
+    with conn:
+        conn.execute('INSERT INTO enrollment (rno, course_code) VALUES (?, ?)', enrollment)
+
+def update_address(conn, name, new_address):
+    with conn:
+        conn.execute('UPDATE students SET address = ? WHERE name = ?', (new_address, name))
+
+def delete_student(conn, rno):
+    with conn:
+        conn.execute('DELETE FROM students WHERE rno = ?', (rno,))
+
+def main():
+    conn = create_connection()
+    create_table(conn)
+
+    students = [
+        (1, 'Sohan Reddy', 'Gandipet', '2000-01-01'),
+        (2, 'Arun', 'Mehidi Patnam', '2000-02-01'),
+        (3, 'Akshaya', 'Gandipet', '2000-03-01')
+    ]
+    for student in students:
+        insert_student(conn, student)
+
+    courses = [
+        ('CS101', 'OOPs', 'CSE', 3),
+        ('EE101', 'BEE', 'EEE', 4),
+        ('MA101', 'Maths', 'Math', 3)
+    ]
+    for course in courses:
+        insert_course(conn, course)
+
+    enrollments = [
+        (1, 'CS101'),
+        (1, 'MA101'),
+        (2, 'EE101'),
+        (3, 'CS101'),
+        (3, 'MA101')
+    ]
+    for enrollment in enrollments:
+        insert_enrollment(conn, enrollment)
+
+    update_address(conn, 'Sohan Reddy', 'New Address')
+    delete_student(conn, 'xxxx')
+
+    cursor = conn.cursor()
+    cursor.execute('''SELECT s.name, c.course_name, c.credits
+                      FROM students s
+                      JOIN enrollment e ON s.rno = e.rno
+                      JOIN courses c ON e.course_code = c.course_code
+                      WHERE c.credits = 3''')
+    for row in cursor.fetchall():
+        print(row)
+
+    conn.close()
+
+if __name__ == "__main__":
+    main()
