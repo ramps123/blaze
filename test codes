@@ -1,0 +1,24 @@
+import sqlite3
+conn=sqlite3.connect('abc.db')
+c=conn.cursor()
+c.execute('CREATE TABLE IF NOT EXISTS customers(idno INTEGER PRIMARY KEY, name TEXT,phno INTEGER)')
+customers=[(59,'sohan',44444),(77,'jake',77777),(34,'arun',109988)]
+for customer in customers:
+    c.execute('INSERT OR IGNORE INTO customers VALUES(?,?,?)',customer)
+for i in c.execute('SELECT * FROM customers' ):
+    print(i)
+
+conn.commit()
+
+
+
+
+import sqlite3
+
+conn = sqlite3.connect('abc.db')
+c = conn.cursor()
+
+c.execute('UPDATE customers SET name=? WHERE idno=?', ('abhinav', 59))
+
+conn.commit()  # Remember to commit the changes
+conn.close()
