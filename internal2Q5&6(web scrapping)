@@ -1,59 +1,41 @@
 import requests
 from bs4 import BeautifulSoup
 
-# Function to fetch the web page and display its title
-def fetch_and_display_title(url):
-    try:
-        response = requests.get(url)
-        soup = BeautifulSoup(response.content, 'html.parser')
-        title = soup.title.string
-        print("Title of the webpage:", title)
-    except Exception as e:
-        print("Error:", e)
+url="https://www.cbit.ac.in"
+response=requests.get(url)
+soup=BeautifulSoup(response.content, "html.parser")
+title=soup.title.text
+print("Webpage Title:", title)
+hyperlinks=soup.find_all('a')
+images=len(soup.find_all('img'))
+tables=len(soup.find_all('table'))>0
+print("No. of hyperlinks:",len(hyperlinks))
+print("No. of Images:",images)
+print("Tables present:",tables)
 
-# Function to count hyperlinks, images, and check for tables
-def count_elements_and_check_tables(url):
+
+def web_scrape(url,option):
+    response=requests.get(url)
+    soup=BeautifulSoup(response.content,"html.parser")
     try:
-        response = requests.get(url)
-        soup = BeautifulSoup(response.content, 'html.parser')
-        hyperlinks = len(soup.find_all('a'))
-        images = len(soup.find_all('img'))
-        tables = len(soup.find_all('table'))
-        print("Number of hyperlinks:", hyperlinks)
-        print("Number of images:", images)
-        if tables > 0:
-            print("The webpage contains tables.")
+        if option=="title":
+            title=soup.title.text
+            print("Title of webpage:",title)
+        elif option=="links":
+            links=len(soup.find_all('a'))
+            print("No. of hyperlinks:",links)
+        elif option=="images":
+            img=len(soup.find_all('img'))
+            print("No. of images:",img)
+        elif option=="tables":
+            tables=len(soup.find_all('table'))
+            print("No. of tables:",tables)
         else:
-            print("The webpage does not contain any tables.")
+            print("Invalid option. Choose 'title','links', 'images', or 'tables'.")
+
     except Exception as e:
-        print("Error:", e)
+        print(f"Error fetching webpage:{e}")
 
-# Function to modify the program based on user input
-def customized_scraping(url, links=False, images=False):
-    try:
-        response = requests.get(url)
-        soup = BeautifulSoup(response.content, 'html.parser')
-        if links:
-            hyperlinks = len(soup.find_all('a'))
-            print("Number of hyperlinks:", hyperlinks)
-        if images:
-            images_count = len(soup.find_all('img'))
-            print("Number of images:", images_count)
-    except Exception as e:
-        print("Error:", e)
-
-# Main function
-def main():
-    url = "https://www.cbit.ac.in"
-    
-    # a. Fetch and display the title of the web page
-    fetch_and_display_title(url)
-    
-    # b. Count hyperlinks, images, and check for tables
-    count_elements_and_check_tables(url)
-
-    # c. Modified program based on user input
-    customized_scraping(url, links=True, images=True)
-
-if __name__ == "__main__":
-    main()
+url=input("Enter url:")
+option=input("Enter option (title, links, images, tables): ").lower()
+web_scrape(url,option)
